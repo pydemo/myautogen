@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // DotnetInteractiveStdioKernelConnectorTests.cs
 
 using AutoGen.DotnetInteractive.Extension;
@@ -28,6 +28,7 @@ public class DotnetInteractiveStdioKernelConnectorTests : IDisposable
             .AddPythonKernel("python3")
             .BuildAsync().Result;
     }
+
 
     [Fact]
     public async Task ItAddCSharpKernelTestAsync()

@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // MistralChatMessageConnector.cs
 
 using System;
@@ -243,7 +243,7 @@ public class MistralChatMessageConnector : IStreamingMiddleware, IMiddleware
         return messages.Select(m => new MessageEnvelope<ChatMessage>(m, from: textMessage.From));
     }
 
-    private IEnumerable<IMessage<ChatMessage>> ProcessToolCallResultMessage(ToolCallResultMessage toolCallResultMessage, IAgent _)
+    private IEnumerable<IMessage<ChatMessage>> ProcessToolCallResultMessage(ToolCallResultMessage toolCallResultMessage, IAgent agent)
     {
         var from = toolCallResultMessage.From;
         var messages = new List<ChatMessage>();

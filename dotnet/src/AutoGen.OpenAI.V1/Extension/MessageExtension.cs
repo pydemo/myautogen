@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // MessageExtension.cs
 
 using System;
@@ -160,6 +160,7 @@ public static class MessageExtension
                 {
                     throw new ArgumentException("System message is not supported when message.From is the same with agent");
                 }
+
 
                 return [new ChatRequestAssistantMessage(textMessage.Content)];
             }

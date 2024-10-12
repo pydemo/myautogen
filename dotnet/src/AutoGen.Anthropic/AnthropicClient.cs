@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // AnthropicClient.cs
 
 using System;
@@ -165,7 +165,7 @@ public sealed class AnthropicClient : IDisposable
         }
     }
 
-    private sealed class ContentBlock
+    private class ContentBlock
     {
         [JsonPropertyName("type")]
         public string? Type { get; set; }
@@ -179,23 +179,22 @@ public sealed class AnthropicClient : IDisposable
         [JsonPropertyName("input")]
         public object? Input { get; set; }
 
-        [JsonPropertyName("parameters")]
-        public string? Parameters { get; set; }
+        public string? parameters { get; set; }
 
         public void AppendDeltaParameters(string deltaParams)
         {
-            StringBuilder sb = new StringBuilder(Parameters);
+            StringBuilder sb = new StringBuilder(parameters);
             sb.Append(deltaParams);
-            Parameters = sb.ToString();
+            parameters = sb.ToString();
         }
 
         public ToolUseContent CreateToolUseContent()
         {
-            return new ToolUseContent { Id = Id, Name = Name, Input = Parameters };
+            return new ToolUseContent { Id = Id, Name = Name, Input = parameters };
         }
     }
 
-    private sealed class DataBlock
+    private class DataBlock
     {
         [JsonPropertyName("content_block")]
         public ContentBlock? ContentBlock { get; set; }

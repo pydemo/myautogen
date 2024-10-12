@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // MistralClient.cs
 
 using System;
@@ -74,7 +74,7 @@ public class MistralClient : IDisposable
                 {
                     var res = await JsonSerializer.DeserializeAsync<ErrorResponse>(
                         new MemoryStream(Encoding.UTF8.GetBytes(currentEvent.Data ?? string.Empty)));
-                    throw new ArgumentException(res?.Error.Message);
+                    throw new Exception(res?.Error.Message);
                 }
 
                 // Reset the current event for the next one

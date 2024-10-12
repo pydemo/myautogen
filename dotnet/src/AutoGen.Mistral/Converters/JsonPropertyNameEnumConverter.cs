@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // JsonPropertyNameEnumConverter.cs
 
 using System;
@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace AutoGen.Mistral;
 
-internal sealed class JsonPropertyNameEnumConverter<T> : JsonConverter<T> where T : struct, Enum
+internal class JsonPropertyNameEnumConverter<T> : JsonConverter<T> where T : struct, Enum
 {
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

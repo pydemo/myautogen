@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // OpenAIChatRequestMessageConnector.cs
 
 using System;
@@ -24,7 +24,7 @@ namespace AutoGen.OpenAI.V1;
 /// </summary>
 public class OpenAIChatRequestMessageConnector : IMiddleware, IStreamingMiddleware
 {
-    private bool strictMode;
+    private bool strictMode = false;
 
     /// <summary>
     /// Create a new instance of <see cref="OpenAIChatRequestMessageConnector"/>.

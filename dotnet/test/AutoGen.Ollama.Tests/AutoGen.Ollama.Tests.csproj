@@ -5,7 +5,6 @@
       <ImplicitUsings>enable</ImplicitUsings>
       <IsPackable>false</IsPackable>
       <IsTestProject>True</IsTestProject>
-      <NoWarn>$(NoWarn);CA1829;CA1826</NoWarn>
       <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
 

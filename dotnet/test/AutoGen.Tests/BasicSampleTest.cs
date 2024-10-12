@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // BasicSampleTest.cs
 
 using System;
@@ -36,6 +36,7 @@ namespace AutoGen.Tests
         {
             await Example03_Agent_FunctionCall.RunAsync();
         }
+
 
         [ApiKeyFact("MISTRAL_API_KEY")]
         public async Task MistralClientAgent_TokenCount()

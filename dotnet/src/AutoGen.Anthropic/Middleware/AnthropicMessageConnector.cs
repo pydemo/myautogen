@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // AnthropicMessageConnector.cs
 
 using System;
@@ -235,7 +235,7 @@ public class AnthropicMessageConnector : IStreamingMiddleware
         };
     }
 
-    private IEnumerable<IMessage> ProcessToolCallMessage(ToolCallMessage toolCallMessage, IAgent _)
+    private IEnumerable<IMessage> ProcessToolCallMessage(ToolCallMessage toolCallMessage, IAgent agent)
     {
         var chatMessage = new ChatMessage("assistant", new List<ContentBase>());
         foreach (var toolCall in toolCallMessage.ToolCalls)

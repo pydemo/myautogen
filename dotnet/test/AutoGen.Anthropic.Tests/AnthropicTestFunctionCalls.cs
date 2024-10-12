@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // AnthropicTestFunctionCalls.cs
 
 using System.Text.Json;
@@ -9,7 +9,7 @@ namespace AutoGen.Anthropic.Tests;
 
 public partial class AnthropicTestFunctionCalls
 {
-    private sealed class GetWeatherSchema
+    private class GetWeatherSchema
     {
         [JsonPropertyName("city")]
         public string? City { get; set; }

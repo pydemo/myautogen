@@ -2,14 +2,13 @@
 node_modules/
 # Project
 /.vs
-# Visual Studio 2015/2017 cache/options directory
-.vs/
-
 .vscode
-
+myenv/
+*.cs
 # Log files
 *.log
-
+log/
+dotnet/
 # Python virtualenv
 .venv*
 

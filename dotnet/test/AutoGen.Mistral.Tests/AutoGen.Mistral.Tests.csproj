@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>$(TestTargetFrameworks)</TargetFrameworks>
@@ -6,7 +6,6 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>True</IsTestProject>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CA1829;CA1826</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

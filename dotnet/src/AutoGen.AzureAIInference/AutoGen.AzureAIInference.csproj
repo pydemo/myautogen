@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>$(PackageTargetFrameworks)</TargetFrameworks>
     <RootNamespace>AutoGen.AzureAIInference</RootNamespace>
@@ -15,7 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.AI.Inference" />
+    <PackageReference Include="Azure.AI.Inference" Version="$(AzureAIInferenceVersion)" />
   </ItemGroup>
 
   <ItemGroup>

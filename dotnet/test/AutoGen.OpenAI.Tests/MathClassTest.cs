@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // MathClassTest.cs
 
 using System;
@@ -95,6 +95,7 @@ the number of resolved question is {correctAnswerCount}
 teacher, please create the next math question";
             }
         }
+
 
         [ApiKeyFact("AZURE_OPENAI_API_KEY", "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_DEPLOY_NAME")]
         public async Task OpenAIAgentMathChatTestAsync()

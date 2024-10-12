@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // ImageMessage.cs
 
 using System;
@@ -69,7 +69,7 @@ public class ImageMessage : IMessage
     {
         if (this.Data is null)
         {
-            throw new ArgumentNullException($"{nameof(Data)}");
+            throw new NullReferenceException($"{nameof(Data)}");
         }
 
         return $"data:{this.MimeType};base64,{Convert.ToBase64String(this.Data.ToArray())}";

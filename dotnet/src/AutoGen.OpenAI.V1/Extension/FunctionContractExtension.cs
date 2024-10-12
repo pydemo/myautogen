@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // FunctionContractExtension.cs
 
 using System;
@@ -33,7 +33,7 @@ public static class FunctionContractExtension
                 throw new InvalidOperationException("Parameter name cannot be null");
             }
 
-            var schemaBuilder = new JsonSchemaBuilder().FromType(param.ParameterType ?? throw new ArgumentException("param.ParameterType cannot be null"));
+            var schemaBuilder = new JsonSchemaBuilder().FromType(param.ParameterType ?? throw new ArgumentNullException(nameof(param.ParameterType)));
             if (param.Description != null)
             {
                 schemaBuilder = schemaBuilder.Description(param.Description);

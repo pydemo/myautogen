@@ -1,0 +1,2 @@
+discord.py
+autogen-agentchat~=0.2

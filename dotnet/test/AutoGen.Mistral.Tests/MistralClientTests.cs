@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // MistralClientTests.cs
 
 using System.Text.Json;
@@ -182,6 +182,7 @@ public partial class MistralClientTests
         person!.Age.Should().Be(41);
         person!.Email.Should().Be("g123456@gmail.com");
     }
+
 
     [ApiKeyFact("MISTRAL_API_KEY")]
     public async Task MistralClientFunctionCallTestAsync()

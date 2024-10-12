@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // SemanticKernelAgentTest.cs
 
 using AutoGen.Core;
@@ -33,6 +33,7 @@ public partial class SemanticKernelAgentTest
         var deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOY_NAME") ?? throw new Exception("Please set AZURE_OPENAI_DEPLOY_NAME environment variable.");
         var builder = Kernel.CreateBuilder()
             .AddAzureOpenAIChatCompletion(deploymentName, endpoint, key);
+
 
         var kernel = builder.Build();
 
@@ -132,6 +133,7 @@ public partial class SemanticKernelAgentTest
         reply.GetContent()!.ToLower().Should().Contain("seattle");
         reply.GetContent()!.ToLower().Should().Contain("sunny");
     }
+
 
     [ApiKeyFact("AZURE_OPENAI_API_KEY", "AZURE_OPENAI_ENDPOINT", "AZURE_OPENAI_DEPLOY_NAME")]
     public async Task BasicSkChatCompletionAgentConversationTestAsync()

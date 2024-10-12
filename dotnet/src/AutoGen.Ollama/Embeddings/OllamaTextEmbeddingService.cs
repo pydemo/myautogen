@@ -1,4 +1,4 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // OllamaTextEmbeddingService.cs
 
 using System;
@@ -26,9 +26,7 @@ public class OllamaTextEmbeddingService : ITextEmbeddingService
         {
             response.EnsureSuccessStatusCode();
 
-#pragma warning disable CA2007 // Consider calling ConfigureAwait on the awaited task
-            Stream? streamResponse = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-#pragma warning restore CA2007 // Consider calling ConfigureAwait on the awaited task
+            Stream? streamResponse = await response.Content.ReadAsStreamAsync();
             TextEmbeddingsResponse output = await JsonSerializer
                                                 .DeserializeAsync<TextEmbeddingsResponse>(streamResponse, cancellationToken: cancellationToken)
                                             ?? throw new Exception("Failed to deserialize response");

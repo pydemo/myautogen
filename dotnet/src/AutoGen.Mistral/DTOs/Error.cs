@@ -1,38 +1,39 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Error.cs
 
 using System.Text.Json.Serialization;
 
-namespace AutoGen.Mistral;
-
-public class Error
+namespace AutoGen.Mistral
 {
-    public Error(string type, string message, string? param = default(string), string? code = default(string))
+    public class Error
     {
-        Type = type;
-        Message = message;
-        Param = param;
-        Code = code;
+        public Error(string type, string message, string? param = default(string), string? code = default(string))
+        {
+            Type = type;
+            Message = message;
+            Param = param;
+            Code = code;
+        }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Message
+        /// </summary>
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Param
+        /// </summary>
+        [JsonPropertyName("param")]
+        public string? Param { get; set; }
+
+        /// <summary>
+        /// Gets or Sets Code
+        /// </summary>
+        [JsonPropertyName("code")]
+        public string? Code { get; set; }
     }
-
-    [JsonPropertyName("type")]
-    public string Type { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Message
-    /// </summary>
-    [JsonPropertyName("message")]
-    public string Message { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Param
-    /// </summary>
-    [JsonPropertyName("param")]
-    public string? Param { get; set; }
-
-    /// <summary>
-    /// Gets or Sets Code
-    /// </summary>
-    [JsonPropertyName("code")]
-    public string? Code { get; set; }
 }
