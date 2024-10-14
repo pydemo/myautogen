@@ -28,7 +28,25 @@ def track(func):
         method=f'{class_name}.{method_name}'
         params=''
 
+        if method_name == 'run_code':
+            #pp(args)
+            #pp(kwargs)
+            owner=args[0]
+            code=args[1]
+            config=kwargs
+            params= f'{owner.name}: config: {config}'
+            if apc.show_code:
+                params= f'{owner.name}: code:"{code}", config: {config}'
 
+            #e()
+
+        if method_name == 'last_message':
+            # pp(args)
+            #pp(kwargs)
+            owner=args[0]
+            agent=args[1]
+            params= f'{owner.name}: Agent: {agent.name}'
+           
 
         if method_name == '_print_received_message':
             #pp(args)
@@ -218,13 +236,14 @@ def track(func):
         if method_name == '__init__':
             pp(args)
             pp(kwargs)
+            #e()
             owner=args[0]
             print('CA: __init__', owner.__class__.__name__) 
             params= kwargs.get('name', None)
             if not params:
                 params=args[1]
             if owner.__class__.__name__=='AssistantAgent':
-                name = args[2] 
+                name = args[1] 
                 
             else:
                 name= kwargs.get('name', 'None')
@@ -241,6 +260,18 @@ def track(func):
        
         result = func(*args, **kwargs)
         print(f"Method '{class_name}.{method_name}' has finished execution.")
+
+
+        if apc.show_reply and method_name in ['check_termination_and_human_reply', 'generate_function_call_reply','generate_tool_calls_reply',
+                           'generate_code_execution_reply']:
+
+            apc.call_id +=1
+            params=result
+
+            
+            branch['calling'][apc.call_id]={'name': f'{class_name}.{method_name} (Result: {params})','depth':apc.depth,'calling':{},'caller':apc.depth-1}
+            
+
         apc.depth -= 1
         return result
     return wrapper
@@ -531,7 +562,7 @@ class ConversableAgent(LLMAgent):
         if not hasattr(self, "_code_executor"):
             return None
         return self._code_executor
-    @track
+    #@track
     def register_reply(
         self,
         trigger: Union[Type[Agent], str, Agent, Callable[[Agent], bool], List],
@@ -793,7 +824,7 @@ class ConversableAgent(LLMAgent):
     def chat_messages_for_summary(self, agent: Agent) -> List[Dict]:
         """A list of messages as a conversation to summarize."""
         return self._oai_messages[agent]
-
+    @track
     def last_message(self, agent: Optional[Agent] = None) -> Optional[Dict]:
         """The last message exchanged with the agent.
 
@@ -860,7 +891,7 @@ class ConversableAgent(LLMAgent):
         if len(name) > 64:
             raise ValueError(f"Invalid name: {name}. Name must be less than 64 characters.")
         return name
-    @track
+    #@track
     def _append_oai_message(self, message: Union[Dict, str], role, conversation_id: Agent, is_sending: bool) -> bool:
         """Append a message to the ChatCompletion conversation.
 
@@ -913,7 +944,7 @@ class ConversableAgent(LLMAgent):
         self._oai_messages[conversation_id].append(oai_message)
 
         return True
-    @track
+    #@track
     def _process_message_before_send(
         self, message: Union[Dict, str], recipient: Agent, silent: bool
     ) -> Union[Dict, str]:
@@ -1042,7 +1073,7 @@ class ConversableAgent(LLMAgent):
             raise ValueError(
                 "Message can't be converted into a valid ChatCompletion message. Either content or function_call must be provided."
             )
-    @track
+    #@track
     def _print_received_message(self, message: Union[Dict, str], sender: Agent):
         iostream = IOStream.get_default()
         # print the message received
@@ -1103,7 +1134,7 @@ class ConversableAgent(LLMAgent):
                     iostream.print(colored("*" * len(func_print), "green"), flush=True)
 
         iostream.print("\n", "-" * 80, flush=True, sep="")
-    @track
+    #@track
     def _process_received_message(self, message: Union[Dict, str], sender: Agent, silent: bool):
         # When the agent receives a message, the role of the message is "user". (If 'role' exists and is 'function', it will remain unchanged.)
         valid = self._append_oai_message(message, "user", sender, is_sending=False)
@@ -1198,7 +1229,7 @@ class ConversableAgent(LLMAgent):
         reply = await self.a_generate_reply(sender=sender)
         if reply is not None:
             await self.a_send(reply, sender, silent=silent)
-    @track
+    #@track
     def _prepare_chat(
         self,
         recipient: "ConversableAgent",
@@ -1457,7 +1488,7 @@ class ConversableAgent(LLMAgent):
             human_input=self._human_input,
         )
         return chat_result
-    @track
+    #@track
     def _summarize_chat(
         self,
         summary_method,
@@ -1541,7 +1572,7 @@ class ConversableAgent(LLMAgent):
             )
             summary = ""
         return summary
-    @track
+    #@track
     def _reflection_with_llm(
         self,
         prompt,
@@ -1578,7 +1609,7 @@ class ConversableAgent(LLMAgent):
             raise ValueError("No OpenAIWrapper client is found.")
         response = self._generate_oai_reply_from_client(llm_client=llm_client, messages=messages, cache=cache)
         return response
-    @track
+    #@track
     def _check_chat_queue_for_sender(self, chat_queue: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Check the chat queue and add the "sender" key if it's missing.
@@ -1613,14 +1644,14 @@ class ConversableAgent(LLMAgent):
         _chat_queue = self._check_chat_queue_for_sender(chat_queue)
         self._finished_chats = await a_initiate_chats(_chat_queue)
         return self._finished_chats
-    @track
+    #@track
     def get_chat_results(self, chat_index: Optional[int] = None) -> Union[List[ChatResult], ChatResult]:
         """A summary from the finished chats of particular agents."""
         if chat_index is not None:
             return self._finished_chats[chat_index]
         else:
             return self._finished_chats
-    @track
+    #@track
     def reset(self):
         """Reset the agent."""
         self.clear_history()
@@ -2424,7 +2455,7 @@ class ConversableAgent(LLMAgent):
                 if final:
                     return reply
         return self._default_auto_reply
-    @track
+    #@track
     def _match_trigger(self, trigger: Union[None, str, type, Agent, Callable, List], sender: Optional[Agent]) -> bool:
         """Check if the sender matches the trigger.
 
@@ -2692,7 +2723,7 @@ class ConversableAgent(LLMAgent):
             "role": "function",
             "content": str(content),
         }
-    @track
+    #@track
     def generate_init_message(self, message: Union[Dict, str, None], **kwargs) -> Union[str, Dict]:
         """Generate the initial message for the agent.
         If message is None, input() will be called to get the initial message.
@@ -2710,7 +2741,7 @@ class ConversableAgent(LLMAgent):
             message = self.get_human_input(">")
 
         return self._handle_carryover(message, kwargs)
-    @track
+    #@track
     def _handle_carryover(self, message: Union[str, Dict], kwargs: dict) -> Union[str, Dict]:
         if not kwargs.get("carryover"):
             return message
@@ -2731,7 +2762,7 @@ class ConversableAgent(LLMAgent):
             raise InvalidCarryOverType("Carryover should be a string or a list of strings.")
 
         return message
-    @track
+    #@track
     def _process_carryover(self, content: str, kwargs: dict) -> str:
         # Makes sure there's a carryover
         if not kwargs.get("carryover"):
@@ -2747,7 +2778,7 @@ class ConversableAgent(LLMAgent):
                 "Carryover should be a string or a list of strings. Not adding carryover to the message."
             )
         return content
-    @track
+    #@track
     def _process_multimodal_carryover(self, content: List[Dict], kwargs: dict) -> List[Dict]:
         """Prepends the context to a multimodal message."""
         # Makes sure there's a carryover
@@ -2770,7 +2801,7 @@ class ConversableAgent(LLMAgent):
             message = await self.a_get_human_input(">")
 
         return self._handle_carryover(message, kwargs)
-    @track
+    #@track
     def register_function(self, function_map: Dict[str, Union[Callable, None]]):
         """Register functions to the agent.
 
@@ -2785,7 +2816,7 @@ class ConversableAgent(LLMAgent):
                 warnings.warn(f"Function '{name}' is being overridden.", UserWarning)
         self._function_map.update(function_map)
         self._function_map = {k: v for k, v in self._function_map.items() if v is not None}
-    @track
+    #@track
     def update_function_signature(self, func_sig: Union[str, Dict], is_remove: None):
         """update a function_signature in the LLM configuration for function_call.
 
@@ -2832,7 +2863,7 @@ class ConversableAgent(LLMAgent):
             del self.llm_config["functions"]
 
         self.client = OpenAIWrapper(**self.llm_config)
-    @track
+    #@track
     def update_tool_signature(self, tool_sig: Union[str, Dict], is_remove: None):
         """update a tool_signature in the LLM configuration for tool_call.
 
@@ -2876,7 +2907,7 @@ class ConversableAgent(LLMAgent):
             del self.llm_config["tools"]
 
         self.client = OpenAIWrapper(**self.llm_config)
-    @track
+    #@track
     def can_execute_function(self, name: Union[List[str], str]) -> bool:
         """Whether the agent can execute the function."""
         names = name if isinstance(name, list) else [name]
@@ -2886,7 +2917,7 @@ class ConversableAgent(LLMAgent):
     def function_map(self) -> Dict[str, Callable]:
         """Return the function map."""
         return self._function_map
-    @track
+    #@track
     def _wrap_function(self, func: F) -> F:
         """Wrap the function to dump the return value to json.
 
@@ -2921,7 +2952,7 @@ class ConversableAgent(LLMAgent):
         wrapped_func._origin = func
 
         return wrapped_func
-    @track
+    #@track
     def register_for_llm(
         self,
         *,
@@ -3013,7 +3044,7 @@ class ConversableAgent(LLMAgent):
             return func
 
         return _decorator
-    @track
+    #@track
     def register_for_execution(
         self,
         name: Optional[str] = None,
@@ -3063,7 +3094,7 @@ class ConversableAgent(LLMAgent):
             return func
 
         return _decorator
-    @track
+    #@track
     def register_model_client(self, model_client_cls: ModelClient, **kwargs):
         """Register a model client.
 
@@ -3072,7 +3103,7 @@ class ConversableAgent(LLMAgent):
             **kwargs: The kwargs for the custom client class to be initialized with
         """
         self.client.register_model_client(model_client_cls, **kwargs)
-    @track
+    #@track
     def register_hook(self, hookable_method: str, hook: Callable):
         """
         Registers a hook to be called by a hookable method, in order to add a capability to the agent.
@@ -3099,7 +3130,7 @@ class ConversableAgent(LLMAgent):
             )
 
         hook_list.append(hook)
-    @track
+    #@track
     def process_all_messages_before_reply(self, messages: List[Dict]) -> List[Dict]:
         """
         Calls any registered capability hooks to process all messages, potentially modifying the messages.
@@ -3133,7 +3164,7 @@ class ConversableAgent(LLMAgent):
                 continue
             processed_messages = await hook(processed_messages)
         return processed_messages
-    @track
+    #@track
     def process_last_received_message(self, messages: List[Dict]) -> List[Dict]:
         """
         Calls any registered capability hooks to use and potentially modify the text of the last message,
@@ -3223,7 +3254,7 @@ class ConversableAgent(LLMAgent):
         messages = messages.copy()
         messages[-1]["content"] = processed_user_content
         return messages
-    @track
+    #@track
     def print_usage_summary(self, mode: Union[str, List[str]] = ["actual", "total"]) -> None:
         """Print the usage summary."""
         iostream = IOStream.get_default()
@@ -3233,14 +3264,14 @@ class ConversableAgent(LLMAgent):
         else:
             iostream.print(f"Agent '{self.name}':")
             self.client.print_usage_summary(mode)
-    @track
+    #@track
     def get_actual_usage(self) -> Union[None, Dict[str, int]]:
         """Get the actual usage summary."""
         if self.client is None:
             return None
         else:
             return self.client.actual_usage_summary
-    @track
+    #@track
     def get_total_usage(self) -> Union[None, Dict[str, int]]:
         """Get the total usage summary."""
         if self.client is None:

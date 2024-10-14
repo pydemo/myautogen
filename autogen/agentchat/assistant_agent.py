@@ -3,7 +3,7 @@ from typing import Callable, Dict, Literal, Optional, Union
 from autogen.runtime_logging import log_new_agent, logging_enabled
 
 from .conversable_agent import ConversableAgent
-
+from pprint import pprint as pp
 
 from autogen.include.config import init_config
 
@@ -20,19 +20,25 @@ def track(func):
         class_name = args[0].__class__.__name__
         method_name = func.__name__        
         branch=apc.tree['calling']
+        owner=args[0]
+        #print(456)
         apc.depth += 1
         apc.call_id +=1
-        
-        params=''
+        #pp(args)
+        #pp(kwargs)
+        descr=kwargs.get('description',None)
+        name=kwargs.get('name',None)
+        #e()
+        params=f'{name}, "{descr[:30]}"'
         if method_name == 'create':
             pp(args)
             pp(kwargs)
             agent=kwargs['agent'].name
-            owner=args[0]
+            
             message=kwargs['messages'][0]['content'][:30]
             params=f'{owner.name}: {agent}, {message}'
             #e()
-
+        
         branch['calling'][apc.call_id]={'name': f'{class_name}.{method_name} ({params})','depth':apc.depth,'calling':{},'caller':apc.depth-1}
        
         print("Before the function runs.", apc.depth, class_name, method_name)

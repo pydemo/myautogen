@@ -2,7 +2,9 @@
 from autogen import apc
 from pprint import pprint as pp
 apc.verbose = True
-
+apc.show_create=False
+apc.show_code=False
+apc.show_reply=False
 apc.depth=0
 apc.call_id=0
 apc.tree={'calling':{ 'name': 'root','calling':{}, 'depth'  : 0}}
@@ -10,7 +12,7 @@ apc.tree={'calling':{ 'name': 'root','calling':{}, 'depth'  : 0}}
 # In[ ]:
 
 
-llm_config={"model": "gpt-4o-mini"}
+llm_config={"model": "gpt-4o"}
 
 
 # ## The task!
@@ -77,7 +79,7 @@ if 1:
         description="An engineer that writes code based on the plan "
         "provided by the planner.",
     )
-
+    #exit(0)
 
     # **Note**: In this lesson, you'll use an alternative method of code execution by providing a dict config. However, you can always use the LocalCommandLineCodeExecutor if you prefer. For more details about code_execution_config, check this: https://microsoft.github.io/autogen/docs/reference/agentchat/conversable_agent/#__init__
 
@@ -116,13 +118,13 @@ if 0:
         #agents=[user_proxy, engineer, writer, executor, planner],
         agents=[user_proxy, planner], 
         messages=[],
-        max_round=10,
+        max_round=12,
     )
 if 1:
     groupchat = autogen.GroupChat(
     agents=[user_proxy, engineer, writer, executor, planner],
     messages=[],
-    max_round=10,
+    max_round=11,
     allowed_or_disallowed_speaker_transitions={
         user_proxy: [engineer, writer, executor, planner],
         engineer: [user_proxy, executor],

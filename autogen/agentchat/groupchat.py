@@ -199,7 +199,7 @@ class GroupChat:
 
     agents: List[Agent]
     messages: List[Dict]
-    max_round: int = 10
+    max_round: int = 11
     admin_name: str = "Admin"
     func_call_filter: bool = True
     speaker_selection_method: Union[Literal["auto", "manual", "random", "round_robin"], Callable] = "auto"
@@ -386,7 +386,7 @@ class GroupChat:
             message["name"] = speaker.name
         message["content"] = content_str(message["content"])
         self.messages.append(message)
-    @track
+    #@track
     def agent_by_name(
         self, name: str, recursive: bool = False, raise_on_name_conflict: bool = False
     ) -> Optional[Agent]:
@@ -407,7 +407,7 @@ class GroupChat:
                 # Recursive call for nested teams
                 agents.extend(agent.groupchat.nested_agents())
         return agents
-    @track
+    #@track
     def next_agent(self, agent: Agent, agents: Optional[List[Agent]] = None) -> Agent:
         """Return the next agent in the list."""
         if agents is None:
@@ -508,7 +508,7 @@ class GroupChat:
         if agents is None:
             agents = self.agents
         return random.choice(agents)
-    @track
+    track
     def _prepare_and_select_agents(
         self,
         last_speaker: Agent,
@@ -668,7 +668,7 @@ class GroupChat:
 
         # auto speaker selection with 2-agent chat
         return await self.a_auto_select_speaker(last_speaker, selector, messages, agents)
-    @track
+    #@track
     def _finalize_speaker(self, last_speaker: Agent, final: bool, name: str, agents: Optional[List[Agent]]) -> Agent:
         if not final:
             # the LLM client is None, thus no reply is generated. Use round robin instead.
@@ -899,7 +899,7 @@ class GroupChat:
         )
 
         return self._process_speaker_selection_result(result, last_speaker, agents)
-    @track
+    #@track
     def _validate_speaker_name(
         self, recipient, messages, sender, config, attempts_left, attempt, agents
     ) -> Tuple[bool, Union[str, Dict, None]]:
@@ -995,7 +995,7 @@ class GroupChat:
                 )
 
         return True, None
-    @track
+    #@track
     def _process_speaker_selection_result(self, result, last_speaker: ConversableAgent, agents: Optional[List[Agent]]):
         """Checks the result of the auto_select_speaker function, returning the
         agent to speak.
@@ -1223,6 +1223,8 @@ class GroupChatManager(ConversableAgent):
             for a in groupchat.agents:
                 a.previous_cache = a.client_cache
                 a.client_cache = self.client_cache
+        print(groupchat.max_round)
+        #e()
         for i in range(groupchat.max_round):
             print(f"GropuChatManger:group chat [{groupchat.max_round}]run_chat: Round {i}")
             self._last_speaker = speaker
@@ -1248,7 +1250,7 @@ class GroupChatManager(ConversableAgent):
                 # let the speaker speak
                 print('GroupChatManager::run_chat:sender:',sender.name,'speaker:',speaker.name)
                 reply = speaker.generate_reply(sender=self)
-                e(999)
+                
             except KeyboardInterrupt:
                 # let the admin agent speak if interrupted
                 if groupchat.admin_name in groupchat.agent_names:
@@ -1279,6 +1281,11 @@ class GroupChatManager(ConversableAgent):
             # The speaker sends the message without requesting a reply
             speaker.send(reply, self, request_reply=False, silent=silent)
             message = self.last_message(speaker)
+            
+            print ( i)
+            if i==0:
+                pass
+                #e(999)
         if self.client_cache is not None:
             for a in groupchat.agents:
                 a.client_cache = a.previous_cache
@@ -1350,7 +1357,7 @@ class GroupChatManager(ConversableAgent):
                 a.client_cache = a.previous_cache
                 a.previous_cache = None
         return True, None
-    @track
+    #@track
     def resume(
         self,
         messages: Union[List[Dict], str],
